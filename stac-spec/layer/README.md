@@ -69,82 +69,122 @@ Each STAC Layer is described as a [GeoJSON Feature](https://geojson.org/schema/F
 
 ```javascript
 {
-    "type": "Feature",
-    "id": "layer-us",
-    "stac_extensions": [
-        "layer"
-    ],
-    // ... 
-    // bbox and geometry that cover all items that belong to the layer
-    "bbox": [
-        -101.40824987104652,
-        37.79718802132125,
-        -73.94863288954222,
-        41.41061537114088
-    ],
-    "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-            [
-                [
-                    -101.40824987104652,
-                    37.79718802132125
-                ],
-                [
-                    -101.40824987104652,
-                    41.41061537114088
-                ],
-                [
-                    -73.94863288954222,
-                    41.41061537114088
-                ],
-                [
-                    -73.94863288954222,
-                    37.79718802132125
-                ],
-                [
-                    -101.40824987104652,
-                    37.79718802132125
-                ]
-            ]
+  "type": "Feature",
+  "id": "layer-us",
+  "stac_extensions": [
+    "layer"
+  ],
+  // ... 
+  // spatio-temporal extent, which can contain the time extent temporal resolution
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -78.32015745740821,
+          37.79447027981874,
+          -73.92530589507936,
+          41.41037947529183
         ]
+      ]
     },
-    // properties should contain the datetime information
-    "properties": {
-        "datetime": null,
-        "start_datetime": "2018-05-01T00:00:00Z",
-        "start_datetime": "2018-08-01T00:00:00Z"
+    "temporal": {
+      "interval": [
+        [
+          "2018-05-01T00:00:00Z",
+          "2018-08-01T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -101.40824987104652,
+          37.79718802132125
+        ],
+        [
+          -101.40824987104652,
+          41.41061537114088
+        ],
+        [
+          -73.94863288954222,
+          41.41061537114088
+        ],
+        [
+          -73.94863288954222,
+          37.79718802132125
+        ],
+        [
+          -101.40824987104652,
+          37.79718802132125
+        ]
+        ]
+      ]
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "./self.json"
     },
-    "links": [
+    {
+      "rel": "parent",
+      "href": "catalog.json"
+    },
+    {
+        "rel": "root",
+        "href": "catalog.json"
+    },
+    {
+        "href": "item-1.json",
+        "rel": "item"
+    },
+    {
+        "href": "item-2.json",
+        "rel": "item"
+    },
+    {
+        "href": "item-3.json",
+        "rel": "item"
+    },
+    {
+        "href": "item-4.json",
+        "rel": "item"
+    }
+  ]
+}
+```
+
+```javascript
+{
+  // ...
+  // another spatio-temporal example that contains temporal resolution
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -78.32015745740821,
+          37.79447027981874,
+          -73.92530589507936,
+          41.41037947529183
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
         {
-            "rel": "self",
-            "href": "./self.json"
-        },
-        {
-            "rel": "parent",
-            "href": "catalog.json"
-        },
-        {
-            "rel": "root",
-            "href": "catalog.json"
-        },
-        {
-            "href": "item-1.json",
-            "rel": "item"
-        },
-        {
-            "href": "item-2.json",
-            "rel": "item"
-        },
-        {
-            "href": "item-3.json",
-            "rel": "item"
-        },
-        {
-            "href": "item-4.json",
-            "rel": "item"
+          "range": [
+            "2018-05-01T00:00:00Z",
+            "2018-08-01T00:00:00Z"
+          ],
+          // ISO 8601:1988(E) compilant period: PnYnMnD
+          "period": "P1M"
         }
-    ]
+      ]
+    }
+  }
+
 }
 ```
 
