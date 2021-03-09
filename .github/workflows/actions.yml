@@ -1,0 +1,25 @@
+name: STAC Layer Extension CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    # allows CI PR runs only from external repos
+    # in other cases push event is used to run it
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != 'azavea/stac-layer'
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        pip install pip install git+https://github.com/pomadchin/stac-validator.git@feature/relative-resolver
+    - name: Validate STAC Layer Extension
+      run: |
+        stac_validator ./stac-spec/layer/examples/landsat-stac-layers/layers/pa.json --custom ./stac-spec/layer/json-schema/layer-schema.json --with_error_code && \
+        stac_validator ./stac-spec/layer/examples/landsat-stac-layers/layers/us.json --custom ./stac-spec/layer/json-schema/layer-schema.json --with_error_code
