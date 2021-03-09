@@ -14,20 +14,20 @@ STAC Layer extension allows to overcome this limitation and allows items to have
 | Path                    | Content-Type Header                                                                                         | Description                                                                       |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `GET /layers/`          | [Catalog](https://github.com/radiantearth/stac-api-spec/blob/master/stac-spec/catalog-spec/catalog-spec.md) | Catalog with links to layers.                                                      |
-| `GET /layers/{layerID}` | [`GeoJSON Feature`](https://github.com/azavea/stac4s/blob/4aba9c6691fde1d5235f165454ceaef6c6b3e165/docs/stac-spec/extensions/layer/json-schema/layer-schema.json)                                                                                       | [STAC Layer](../../../stac-spec/extensions/layer/README.md) as a GeoJSON Feature. |
+| `GET /layers/{layerID}` | [`GeoJSON Feature`](../../stac-spec/layer/json-schema/layer-schema.json)                                                                                       | [STAC Layer](../../stac-spec/layer/README.md) as a GeoJSON Feature. |
 
 **!IMPORTANT** 
-To query items by `layer` identifiers it is required to use the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query). See [STAC Layer Extension description](../../../stac-spec/extensions/layer/README.md#item-fields) to clarify how STAC Items property fields are defined to follow [STAC Layer Extension](../../../stac-spec/extensions/layer/README.md).
+To query items by `layer` identifiers it is required to use the [Query API Extension](https://github.com/radiantearth/stac-api-spec/tree/master/extensions/query). See [STAC Layer Extension description](../../stac-spec/layer/README.md#item-fields) to clarify how STAC Items property fields are defined to follow [STAC Layer Extension](../../stac-spec/layer/README.md).
 
 ## Schema
 
-- [JSON Static Layer Schema](../../../stac-spec/extensions/layer/json-schema/layer-schema.json)
+- [JSON Static Layer Schema](../../stac-spec/layer/json-schema/layer-schema.json)
 
 ## How It Works
 
-When this extension is implemented, the API supports `layers` endpoint that list all layers available. An example of the result output can be found [here](../../../stac-spec/extensions/layer/examples/landsat-stac-layers/layers/catalog.json).
+When this extension is implemented, the API supports `layers` endpoint that list all layers available. An example of the result output can be found [here](../../stac-spec/layer/examples/landsat-stac-layers/layers/catalog.json).
 
-The specific STAC Layer is available at `/layers/{layerID}`. The example output can be found [here](../../../stac-spec/extensions/layer/examples/landsat-stac-layers/layers/us.json)
+The specific STAC Layer is available at `/layers/{layerID}`. The example output can be found [here](../../stac-spec/layer/examples/landsat-stac-layers/layers/us.json)
 
 ## Layer ID
 
@@ -69,81 +69,121 @@ Request to `GET /layers/layer-us`:
 
 ```javascript
 {
-    "type": "Feature",
-    "id": "layer-us",
-    "stac_extensions": [
-        "layer"
-    ],
-    // ... 
-    // bbox and geometry that cover all items that belong to the layer
-    "bbox": [
-        -101.40824987104652,
-        37.79718802132125,
-        -73.94863288954222,
-        41.41061537114088
-    ],
-    "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-            [
-                [
-                    -101.40824987104652,
-                    37.79718802132125
-                ],
-                [
-                    -101.40824987104652,
-                    41.41061537114088
-                ],
-                [
-                    -73.94863288954222,
-                    41.41061537114088
-                ],
-                [
-                    -73.94863288954222,
-                    37.79718802132125
-                ],
-                [
-                    -101.40824987104652,
-                    37.79718802132125
-                ]
-            ]
+  "type": "Feature",
+  "id": "layer-us",
+  "stac_extensions": [
+    "layer"
+  ],
+  // ... 
+  // spatio-temporal extent, which can contain the time extent temporal resolution
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -78.32015745740821,
+          37.79447027981874,
+          -73.92530589507936,
+          41.41037947529183
         ]
+      ]
     },
-    // properties can contain the layer temporal information
-    "properties": {
-        "datetime": null,
-        "start_datetime": "2018-05-01T00:00:00Z",
-        "end_datetime": "2018-08-01T00:00:00Z"
+    "temporal": {
+      "interval": [
+        [
+          "2018-05-01T00:00:00Z",
+          "2018-08-01T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -101.40824987104652,
+          37.79718802132125
+        ],
+        [
+          -101.40824987104652,
+          41.41061537114088
+        ],
+        [
+          -73.94863288954222,
+          41.41061537114088
+        ],
+        [
+          -73.94863288954222,
+          37.79718802132125
+        ],
+        [
+          -101.40824987104652,
+          37.79718802132125
+        ]
+        ]
+      ]
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "./self.json"
     },
-    "links": [
+    {
+      "rel": "parent",
+      "href": "catalog.json"
+    },
+    {
+        "rel": "root",
+        "href": "catalog.json"
+    },
+    {
+        "href": "item-1.json",
+        "rel": "item"
+    },
+    {
+        "href": "item-2.json",
+        "rel": "item"
+    },
+    {
+        "href": "item-3.json",
+        "rel": "item"
+    },
+    {
+        "href": "item-4.json",
+        "rel": "item"
+    }
+  ]
+}
+```
+
+```javascript
+{
+  // ...
+  // another spatio-temporal example that contains temporal resolution
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -78.32015745740821,
+          37.79447027981874,
+          -73.92530589507936,
+          41.41037947529183
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
         {
-            "rel": "self",
-            "href": "/layers/layer-us"
-        },
-        {
-            "rel": "parent",
-            "href": "/layers"
-        },
-        {
-            "rel": "root",
-            "href": "/"
-        },
-        {
-            "href": "/collections/landsat-8-l1/items/item-1",
-            "rel": "item"
-        },
-        {
-            "href": "/collections/landsat-8-l1/items/item-2",
-            "rel": "item"
-        },
-        {
-            "href": "/collections/landsat-8-l1/items/item-3",
-            "rel": "item"
-        },
-        {
-            "href": "/collections/landsat-8-l1/items/item-4",
-            "rel": "item"
+          "range": [
+            "2018-05-01T00:00:00Z",
+            "2018-08-01T00:00:00Z"
+          ],
+          // ISO 8601:1988(E) compilant period: PnYnMnD
+          "period": "P1M"
         }
-    ]
+      ]
+    }
+  }
+
 }
 ```
